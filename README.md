@@ -265,3 +265,19 @@ https://github.com/Laran40595
 ✅ Backup & Restore Verified  
 ✅ Docker Health Checks Working  
 ✅ GitHub Repository Updated
+
+---
+
+# 📸 Screenshots
+
+## Docker Health Status
+
+![Docker Containers](screenshots/docker-health.png)
+
+## Employee API Response
+
+![API Response](screenshots/api-response.png)
+
+## Database Backup Test
+
+![Backup Test](screenshots/backup-test.png)
