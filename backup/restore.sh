@@ -10,17 +10,32 @@ then
     exit 1
 fi
 
-echo "Dropping existing employee database..."
+CONTAINER="employee-postgres"
+DATABASE="employee"
+USER="postgres"
 
-docker exec -i employee-postgres psql -U postgres <<EOF
-DROP DATABASE IF EXISTS employee;
-CREATE DATABASE employee;
+
+echo "Terminating active database connections..."
+
+docker exec -i $CONTAINER psql -U $USER postgres <<EOF
+SELECT pg_terminate_backend(pid)
+FROM pg_stat_activity
+WHERE datname='$DATABASE'
+AND pid <> pg_backend_pid();
+EOF
+
+
+echo "Dropping existing database..."
+
+docker exec -i $CONTAINER psql -U $USER postgres <<EOF
+DROP DATABASE IF EXISTS $DATABASE;
+CREATE DATABASE $DATABASE;
 EOF
 
 
 echo "Restoring backup..."
 
-cat $BACKUP_FILE | docker exec -i employee-postgres psql -U postgres employee
+cat $BACKUP_FILE | docker exec -i $CONTAINER psql -U $USER $DATABASE
 
 
 if [ $? -eq 0 ]
@@ -28,4 +43,10 @@ then
     echo "Restore completed successfully"
 else
     echo "Restore failed"
+    exit 1
 fi
+
+
+echo "Checking restored data..."
+
+docker exec -i $CONTAINER psql -U $USER $DATABASE -c "SELECT COUNT(*) FROM employees;"
