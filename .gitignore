@@ -1,17 +1,77 @@
+# ===============================
+# Java / Spring Boot
+# ===============================
+target/
+*.jar
+*.war
+*.ear
+
+# Maven
+.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/maven-wrapper.jar
+
+# ===============================
+# IDE Files
+# ===============================
+.idea/
+.vscode/
+*.iml
+*.classpath
+*.project
+*.settings/
+
+# ===============================
+# OS Files
+# ===============================
+.DS_Store
+Thumbs.db
+
+# ===============================
+# Docker
+# ===============================
+docker-compose.override.yml
+
+# ===============================
+# Database Backups
+# ===============================
+backup/database-backups/
+*.sql
+
+# ===============================
+# Logs
+# ===============================
+*.log
+logs/
+
+# ===============================
 # Terraform
-**/.terraform/*
+# ===============================
+.terraform/
 *.tfstate
 *.tfstate.*
 crash.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
 
-# Keep the dependency lock file
-!.terraform.lock.hcl
+# ===============================
+# Kubernetes
+# ===============================
+*.secret.yaml
+*.key
+*.pem
 
-# IDE
-.vscode/
+# ===============================
+# Environment Variables
+# ===============================
+.env
+.env.*
 
-# OS
-.DS_Store
-
-# Logs
-*.log
+# ===============================
+# Temporary Files
+# ===============================
+*.tmp
+*.temp
+*.swp
+*.bak
