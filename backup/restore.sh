@@ -7,46 +7,50 @@ BACKUP_FILE=$1
 if [ -z "$BACKUP_FILE" ]
 then
     echo "Usage: ./restore.sh backup_file.sql"
+
+    ./backup/notify.sh "❌ Database Restore Failed
+Reason: No backup file provided
+🖥️ Host: $(hostname)
+⏰ Time: $(date)"
+
     exit 1
 fi
 
-CONTAINER="employee-postgres"
-DATABASE="employee"
-USER="postgres"
+
+echo "Dropping existing employee database..."
 
 
-echo "Terminating active database connections..."
-
-docker exec -i $CONTAINER psql -U $USER postgres <<EOF
-SELECT pg_terminate_backend(pid)
-FROM pg_stat_activity
-WHERE datname='$DATABASE'
-AND pid <> pg_backend_pid();
-EOF
-
-
-echo "Dropping existing database..."
-
-docker exec -i $CONTAINER psql -U $USER postgres <<EOF
-DROP DATABASE IF EXISTS $DATABASE;
-CREATE DATABASE $DATABASE;
+docker exec -i employee-postgres psql -U postgres <<EOF
+DROP DATABASE IF EXISTS employee WITH (FORCE);
+CREATE DATABASE employee;
 EOF
 
 
 echo "Restoring backup..."
 
-cat $BACKUP_FILE | docker exec -i $CONTAINER psql -U $USER $DATABASE
+
+cat $BACKUP_FILE | docker exec -i employee-postgres psql -U postgres employee
 
 
 if [ $? -eq 0 ]
 then
+
     echo "Restore completed successfully"
+
+    ./backup/notify.sh "✅ Database Restore Successful
+📦 Database: employee
+📁 Backup: $BACKUP_FILE
+🖥️ Host: $(hostname)
+⏰ Time: $(date)"
+
 else
+
     echo "Restore failed"
-    exit 1
+
+    ./backup/notify.sh "❌ Database Restore FAILED
+📦 Database: employee
+📁 Backup: $BACKUP_FILE
+🖥️ Host: $(hostname)
+⏰ Time: $(date)"
+
 fi
-
-
-echo "Checking restored data..."
-
-docker exec -i $CONTAINER psql -U $USER $DATABASE -c "SELECT COUNT(*) FROM employees;"
