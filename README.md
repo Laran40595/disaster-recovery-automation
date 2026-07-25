@@ -268,16 +268,77 @@ https://github.com/Laran40595
 
 ---
 
-# 📸 Screenshots
+# 🔔 Slack Monitoring Notifications
 
-## Docker Health Status
+The Disaster Recovery Automation Platform includes Slack webhook integration for real-time operational alerts.
 
-![Docker Containers](screenshots/docker-health.png)
+The system automatically sends notifications during:
 
-## Employee API Response
+- ✅ Successful PostgreSQL database backups
+- ❌ Failed backup operations
+- ✅ Successful database restores
+- ❌ Failed restore operations
 
-![API Response](screenshots/api-response.png)
+## Notification Workflow
 
-## Database Backup Test
 
-![Backup Test](screenshots/backup-test.png)
+Backup Script
+|
+|
+PostgreSQL Database Backup
+|
+|
+Slack Webhook
+|
+|
+DevOps Team Notification
+
+
+## Example Slack Alert
+
+
+✅ PostgreSQL Backup Successful
+
+Database: employee
+
+Backup File:
+employee_backup_2026-07-25_08-24-11.sql
+
+Host:
+GreatTechie
+
+Time:
+2026-07-25 08:24:11
+
+
+## Security
+
+The Slack webhook URL is stored securely using environment variables.
+
+Example:
+
+```bash
+SLACK_WEBHOOK_URL="your_slack_webhook_here"
+
+Sensitive credentials are excluded from Git tracking using .gitignore.
+
+📊 Disaster Recovery Workflow
+
+The complete recovery lifecycle:
+
+Application data is stored in PostgreSQL
+Automated backup script creates database snapshots
+Backup files are stored locally
+Restore script recreates the database
+Application services are restarted
+Recovery is verified through API testing
+Slack sends operational status notifications
+Project Status
+
+✅ Docker Deployment Complete
+✅ PostgreSQL Backup Automation Complete
+✅ Database Restore Tested
+✅ Docker Health Checks Working
+✅ Slack Notifications Integrated
+✅ GitHub Repository Updated
+
